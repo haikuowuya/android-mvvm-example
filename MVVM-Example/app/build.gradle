@@ -1,0 +1,87 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.3'
+        classpath 'org.codehaus.groovy:gradle-groovy-android-plugin:0.3.6'
+        classpath 'me.tatarka:gradle-retrolambda:3.0.1'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'groovyx.grooid.groovy-android'
+
+repositories {
+    mavenCentral()
+}
+
+// https://github.com/evant/gradle-retrolambda#using-google-play-services-causes-retrolambda-to-fail
+retrolambda {
+    jvmArgs '-noverify'
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        renderscriptTargetApi 21
+        renderscriptSupportModeEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId "de.rheinfabrik.mvvm_example"
+        minSdkVersion 17
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/services/org.codehaus.groovy.transform.ASTTransformation'
+    }
+
+    // https://github.com/evant/gradle-retrolambda#android-studio-setup
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    // Android
+    compile 'com.android.support:appcompat-v7:22.1.0'
+    compile 'com.android.support:support-v4:22.1.0'
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+    compile 'com.android.support:cardview-v7:21.0.3'
+
+    // Square
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.jakewharton:butterknife:1.2.2'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Other
+    compile 'com.github.frankiesardo:icepick:2.3.6'
+    provided 'com.github.frankiesardo:icepick-processor:2.3.6'
+
+    // Parsing
+    compile 'com.google.code.gson:gson:2.3.1'
+
+    // Rx
+    compile 'io.reactivex:rxandroid-framework:0.24.0'
+
+    // Testing
+    androidTestCompile 'org.codehaus.groovy:groovy:2.4.2:grooid'
+    androidTestCompile 'com.andrewreitz:spock-android:1.2.0'
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+        exclude group: 'org.codehaus.groovy'
+        exclude group: 'junit'
+    }
+}

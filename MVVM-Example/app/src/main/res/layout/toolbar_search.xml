@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+
+    <!-- Search field -->
+    <EditText
+        android:id="@+id/search_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="4dp"
+        android:singleLine="true"
+        android:inputType="textNoSuggestions"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:hint="@string/search_hint"
+        android:textCursorDrawable="@null"
+        android:imeOptions="actionDone"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"/>
+
+</merge>
