@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.InjectView;
 import butterknife.Views;
 import de.rheinfabrik.mvvm_example.R;
