@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.InjectView;
 import butterknife.Views;
 import de.rheinfabrik.mvvm_example.R;
@@ -77,23 +79,23 @@ public class DetailsActivity extends RxAppCompatActivity {
         super.onResume();
 
         // Bind title
-        bindActivityLifecycle(lifecycle(), mViewModel.titleSubject)
+        bindActivityLifecycle(lifecycle(), mViewModel.title())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mToolbar::setTitle);
 
         // Bind plot visibility
-        bindActivityLifecycle(lifecycle(), mViewModel.plotSubject)
+        bindActivityLifecycle(lifecycle(), mViewModel.plot())
                 .map(text -> text == null || text.isEmpty() ? View.GONE : View.VISIBLE)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mCardView::setVisibility);
 
         // Bind plot
-        bindActivityLifecycle(lifecycle(), mViewModel.plotSubject)
+        bindActivityLifecycle(lifecycle(), mViewModel.plot())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mTextView::setText);
 
         // Bind poster
-        bindActivityLifecycle(lifecycle(), mViewModel.posterUrlSubject)
+        bindActivityLifecycle(lifecycle(), mViewModel.posterUrl())
                 .map(url -> Picasso.with(getApplicationContext()).load(url).transform(new BlurTransformation(this)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(picasso -> {

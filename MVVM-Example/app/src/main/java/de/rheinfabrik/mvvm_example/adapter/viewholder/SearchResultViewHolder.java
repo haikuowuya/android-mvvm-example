@@ -56,7 +56,7 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
     public void bind() {
 
         // Bind text
-        bindViewImmediate(itemView, mViewModel.textSubject)
+        bindViewImmediate(itemView, mViewModel.text())
                 .subscribe(mTextView::setText);
 
         // Bind clicks
@@ -64,7 +64,7 @@ public class SearchResultViewHolder extends RecyclerView.ViewHolder {
                 .subscribe(x -> mViewModel.openDetailsCommand.onNext(null));
 
         // Bind open details
-        bindView(itemView, mViewModel.onOpenDetailsSubject)
+        bindView(itemView, mViewModel.onOpenDetails())
                 .subscribe(mContext::startActivity);
     }
 

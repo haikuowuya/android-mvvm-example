@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import de.rheinfabrik.mvvm_example.controller.SearchResultController;
 import de.rheinfabrik.mvvm_example.network.models.SearchResult;
+import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
@@ -13,19 +14,23 @@ import static de.rheinfabrik.mvvm_example.utils.rx.RxCachedSample.cachedSample;
 /**
  * ViewModel responsible for the search screen.
  */
-public class SearchViewModel {
+public final class SearchViewModel {
 
-    // Subjects
+    // Observables
 
     /**
      * Emits the received search results.
      */
-    public final BehaviorSubject<List<SearchResult>> onSearchResultsReceivedSubject = BehaviorSubject.create();
+    public final Observable<List<SearchResult>> searchResults() {
+        return mSearchResultsSubject.asObservable();
+    }
 
     /**
      * Emits a value if the search should be shown or hidden.
      */
-    public final BehaviorSubject<Boolean> onShowSearchSubject = BehaviorSubject.create(false);
+    public final Observable<Boolean> showSearch() {
+        return mShowSearchSubject.asObservable();
+    }
 
     // Commands
 
@@ -38,6 +43,11 @@ public class SearchViewModel {
      * Toggle the visibility of the search.
      */
     public final PublishSubject<Void> toggleSearchVisibilityCommand = PublishSubject.create();
+
+    // Members
+
+    private final BehaviorSubject<List<SearchResult>> mSearchResultsSubject = BehaviorSubject.create();
+    private final BehaviorSubject<Boolean> mShowSearchSubject = BehaviorSubject.create(false);
 
     // Constructor
 
@@ -65,14 +75,14 @@ public class SearchViewModel {
 
                 /* Resubscribe on error */
                 .retry()
-                .subscribe(onSearchResultsReceivedSubject::onNext);
+                .subscribe(mSearchResultsSubject::onNext);
 
         // Search visibility
-        cachedSample(onShowSearchSubject, toggleSearchVisibilityCommand)
+        cachedSample(mShowSearchSubject, toggleSearchVisibilityCommand)
 
                 /* Invert value */
                 .map(shown -> !shown)
-                .subscribe(onShowSearchSubject::onNext);
+                .subscribe(mShowSearchSubject::onNext);
     }
 
 }

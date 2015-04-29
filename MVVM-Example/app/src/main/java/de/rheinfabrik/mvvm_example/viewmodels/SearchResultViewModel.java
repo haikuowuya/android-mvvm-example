@@ -8,6 +8,7 @@ import android.text.Spanned;
 
 import de.rheinfabrik.mvvm_example.network.models.SearchResult;
 import de.rheinfabrik.mvvm_example.utils.IntentFactory;
+import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
@@ -16,19 +17,23 @@ import static de.rheinfabrik.mvvm_example.utils.rx.RxCachedSample.cachedSample;
 /**
  * ViewModel for a single search result item.
  */
-public class SearchResultViewModel {
+public final class SearchResultViewModel {
 
-    // Subjects
+    // Observable
 
     /**
      * Emits the text that should be displayed
      */
-    public final BehaviorSubject<Spanned> textSubject = BehaviorSubject.create();
+    public final Observable<Spanned> text() {
+        return mTextSubject.asObservable();
+    }
 
     /**
      * Emits the correct intent to open the details activity.
      */
-    public final PublishSubject<Intent> onOpenDetailsSubject = PublishSubject.create();
+    public final Observable<Intent> onOpenDetails() {
+        return mOnOpenDetailsSubject.asObservable();
+    }
 
     // Commands
 
@@ -41,7 +46,12 @@ public class SearchResultViewModel {
      * Send null to this command to request a details intent.
      */
     public final PublishSubject<Void> openDetailsCommand = PublishSubject.create();
-    
+
+    // Members
+
+    private final BehaviorSubject<Spanned> mTextSubject = BehaviorSubject.create();
+    private final PublishSubject<Intent> mOnOpenDetailsSubject = PublishSubject.create();
+
     // Constructor
 
     /**
@@ -68,11 +78,11 @@ public class SearchResultViewModel {
 
                 /* Resubscribe on error */
                 .retry()
-                .subscribe(textSubject::onNext);
+                .subscribe(mTextSubject::onNext);
 
         // Details
         cachedSample(setSearchResultCommand, openDetailsCommand)
                 .map(item -> IntentFactory.newDetailsActivityIntent(context, item))
-                .subscribe(onOpenDetailsSubject::onNext);
+                .subscribe(mOnOpenDetailsSubject::onNext);
     }
 }
