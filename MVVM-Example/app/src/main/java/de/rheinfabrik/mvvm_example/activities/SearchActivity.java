@@ -61,7 +61,7 @@ public class SearchActivity extends RxAppCompatActivity {
         super.onResume();
 
         // Bind show/hide search and show correct icon
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.onShowSearchSubject)
+        bindActivityLifecycle(lifecycle(), mSearchViewModel.showSearch())
                 .map(showSearch -> showSearch ? R.mipmap.ic_action_close : R.mipmap.ic_action_search)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> {
@@ -73,12 +73,12 @@ public class SearchActivity extends RxAppCompatActivity {
                 });
 
         // Bind show/hide search UI in toolbar
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.onShowSearchSubject)
+        bindActivityLifecycle(lifecycle(), mSearchViewModel.showSearch())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mToolbar::setSearchUIVisible);
 
         // Bind show/hide keyboard
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.onShowSearchSubject)
+        bindActivityLifecycle(lifecycle(), mSearchViewModel.showSearch())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(showKeyboard -> {
                     if (showKeyboard) {
@@ -95,7 +95,7 @@ public class SearchActivity extends RxAppCompatActivity {
                 .subscribe(mSearchViewModel.searchCommand::onNext);
 
         // Bind search results
-        bindActivityLifecycle(lifecycle(), mSearchViewModel.onSearchResultsReceivedSubject)
+        bindActivityLifecycle(lifecycle(), mSearchViewModel.searchResults())
                 .map(results -> new SearchResultsAdapter(this, results))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mRecyclerView::setAdapter);

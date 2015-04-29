@@ -12,24 +12,30 @@ import static de.rheinfabrik.mvvm_example.utils.rx.RxCachedSample.cachedSample;
 /**
  * View model for the details activity.
  */
-public class DetailsViewModel {
+public final class DetailsViewModel {
 
-    // Subjects
+    // Observables
 
     /**
      * Emits the title of the item.
      */
-    public final BehaviorSubject<String> titleSubject = BehaviorSubject.create();
+    public final Observable<String> title() {
+        return mTitleSubject.asObservable();
+    }
 
     /**
      * Emits the plot of the item.
      */
-    public final BehaviorSubject<String> plotSubject = BehaviorSubject.create("");
+    public final Observable<String> plot() {
+        return mPlotSubject.asObservable();
+    }
 
     /**
      * Emits the poster url of the item.
      */
-    public final BehaviorSubject<String> posterUrlSubject = BehaviorSubject.create();
+    public final Observable<String> posterUrl() {
+        return mPosterUrlSubject.asObservable();
+    }
 
     // Commands
 
@@ -42,6 +48,12 @@ public class DetailsViewModel {
      * Send a value to this command to load the required details.
      */
     public final PublishSubject<Void> loadDetailsCommand = PublishSubject.create();
+
+    // Members
+
+    private BehaviorSubject<String> mTitleSubject = BehaviorSubject.create();
+    private BehaviorSubject<String> mPlotSubject = BehaviorSubject.create("");
+    private BehaviorSubject<String> mPosterUrlSubject = BehaviorSubject.create();
 
     // Constructor
 
@@ -60,7 +72,7 @@ public class DetailsViewModel {
         // Title
         setItemCommand
                 .map(item -> item.title)
-                .subscribe(titleSubject::onNext);
+                .subscribe(mTitleSubject::onNext);
 
         // Loading
         Observable<DetailsResult> loadingObservable = cachedSample(setItemCommand, loadDetailsCommand)
@@ -70,11 +82,11 @@ public class DetailsViewModel {
         // Plot
         loadingObservable
                 .map(result -> result.plot)
-                .subscribe(plotSubject::onNext);
+                .subscribe(mPlotSubject::onNext);
 
         // Poster URL
         loadingObservable
                 .map(result -> result.posterUrl)
-                .subscribe(posterUrlSubject::onNext);
+                .subscribe(mPosterUrlSubject::onNext);
     }
 }

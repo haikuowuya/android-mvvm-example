@@ -32,7 +32,7 @@ class DetailsViewModelTitleSubjectSpecs extends AndroidSpecification {
             viewModel.setItemCommand.onNext(searchResult)
 
         when: "I ask for the title"
-            String title = viewModel.titleSubject.toBlocking().first()
+            String title = viewModel.title().toBlocking().first()
 
         then: "I receive the correct title"
             title == "Testio"
@@ -72,7 +72,7 @@ class DetailsViewModelPlotSubjectSpecs extends AndroidSpecification {
             viewModel.loadDetailsCommand.onNext(null)
 
         and: "I ask for the plot"
-            String plot = viewModel.plotSubject.toBlocking().first()
+            String plot = viewModel.plot().toBlocking().first()
 
         then: "I should receive the correct plot"
             plot == "Set in the Shinigami technical school for weapon meisters, the series revolves around 3 groups of each a weapon meister and a human weapon. Trying to make the latter a \"Death Scythe\" and thus fit for use by the Shinigami, they must collect the souls of 99 evil humans and 1 witch."
@@ -112,7 +112,7 @@ class DetailsViewModelPosterUrlSubjectSpecs extends AndroidSpecification {
             viewModel.loadDetailsCommand.onNext(null)
 
         and: "I ask for the poster url"
-            String posterUrl = viewModel.posterUrlSubject.toBlocking().first()
+            String posterUrl = viewModel.posterUrl().toBlocking().first()
 
         then: "I should receive the correct poster url"
             posterUrl == "http://ia.media-imdb.com/images/M/MV5BMTQyOTg0MjYzMF5BMl5BanBnXkFtZTgwNDgwMzcwMzE@._V1_SX300.jpg"

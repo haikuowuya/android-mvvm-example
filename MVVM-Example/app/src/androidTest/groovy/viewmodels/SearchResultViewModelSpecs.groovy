@@ -40,7 +40,7 @@ class SearchResultViewModelOpenDetailsSubjectSpecs extends Specification {
 
         and: "I am listening for details intents"
             Intent intent = null
-            viewModel.onOpenDetailsSubject
+            viewModel.onOpenDetails()
                     .subscribe({ i -> intent = i })
 
         when: "I want to open the details"
@@ -84,7 +84,7 @@ class SearchResultViewModelTextSubjectSpecs extends Specification {
             viewModel.setSearchResultCommand.onNext(searchResult)
 
         and: "I ask for the text"
-            Spanned text = viewModel.textSubject.toBlocking().first()
+            Spanned text = viewModel.text().toBlocking().first()
 
         then: "It should match my expected text"
             text.toString() == "Title (2015)"
@@ -104,7 +104,7 @@ class SearchResultViewModelTextSubjectSpecs extends Specification {
             viewModel.setSearchResultCommand.onNext(searchResult)
 
         and: "I ask for the text"
-            Spanned text = viewModel.textSubject.toBlocking().first()
+            Spanned text = viewModel.text().toBlocking().first()
 
         then: "It should be a placeholder text"
             text.toString() == "/"
@@ -124,7 +124,7 @@ class SearchResultViewModelTextSubjectSpecs extends Specification {
             viewModel.setSearchResultCommand.onNext(searchResult)
 
         and: "I ask for the text"
-            Spanned text = viewModel.textSubject.toBlocking().first()
+            Spanned text = viewModel.text().toBlocking().first()
 
         then: "It should be the title"
             text.toString() == "Title"

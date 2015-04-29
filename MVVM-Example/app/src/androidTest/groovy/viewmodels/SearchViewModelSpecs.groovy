@@ -43,7 +43,7 @@ class SearchViewModelOnSearchResultsReceivedSpecs extends AndroidSpecification {
             viewModel.searchCommand.onNext("frozen");
 
         and: "I ask for the search results"
-            List<SearchResult> results = viewModel.onSearchResultsReceivedSubject.toBlocking().firstOrDefault(null)
+            List<SearchResult> results = viewModel.searchResults().toBlocking().firstOrDefault(null)
 
         then: "The results should contain 2 items"
             results != null
@@ -76,7 +76,7 @@ class SearchViewModelToogleSearchVisibilitySpecs extends AndroidSpecification {
             SearchViewModel searchViewModel = new SearchViewModel();
 
         when: "I subscribe to the onShowSearchSubject"
-            boolean showSearch = searchViewModel.onShowSearchSubject.toBlocking().first();
+            boolean showSearch = searchViewModel.showSearch().toBlocking().first();
 
         then: "I receive the value false"
             !showSearch
@@ -91,7 +91,7 @@ class SearchViewModelToogleSearchVisibilitySpecs extends AndroidSpecification {
             searchViewModel.toggleSearchVisibilityCommand.onNext(null)
 
         and: "I subscribe to the onShowSearchSubject"
-            boolean showSearch = searchViewModel.onShowSearchSubject.toBlocking().first();
+            boolean showSearch = searchViewModel.showSearch().toBlocking().first();
 
         then: "I receive the value true"
             showSearch
@@ -109,7 +109,7 @@ class SearchViewModelToogleSearchVisibilitySpecs extends AndroidSpecification {
             searchViewModel.toggleSearchVisibilityCommand.onNext(null)
 
         and: "I subscribe to the onShowSearchSubject"
-            boolean showSearch = searchViewModel.onShowSearchSubject.toBlocking().first();
+            boolean showSearch = searchViewModel.showSearch().toBlocking().first();
 
         then: "I receive the value false"
             !showSearch
